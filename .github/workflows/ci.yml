@@ -59,6 +59,10 @@ jobs:
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
 
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.rally-artifact-id }}"
+      - name: Leave a comment
+        id: comment
+        if: always()
+        uses: mshick/add-pr-comment@v2
+        with:
+          message:
+            'Found Rally Artifact: ${{ steps.find.outputs.rally-artifact-url }}'
