@@ -1,5 +1,4 @@
 const { context } = require('@actions/github')
-const rally = require('rally')
 
 function containsFormattedId(str, formattedIdRegex) {
   const matches = str.match(formattedIdRegex)
@@ -11,14 +10,15 @@ function containsFormattedId(str, formattedIdRegex) {
   }
 }
 
-async function getRallyArtifact(formattedId) {
+async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
+    fetch: true,
+    type: 'hierarchicalrequirement',
     query: `(FormattedID = ${formattedId})`
   })
 
   return queryResult?.Results?.[0]
 }
-
 function getTitle() {
   return context?.payload?.pull_request?.title
 }
@@ -29,4 +29,12 @@ function getBranch() {
 
 function getBody() {
   return context?.payload?.pull_request?.body
+}
+
+module.exports = {
+  containsFormattedId,
+  getRallyArtifact,
+  getTitle,
+  getBranch,
+  getBody
 }

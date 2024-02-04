@@ -1,5 +1,6 @@
 const core = require('@actions/core')
 const utils = require('./utils')
+const rally = require('rally')
 
 /**
  * The main function for the action.
@@ -37,11 +38,22 @@ async function run() {
 
     core.setOutput('rally-artifacts', allMatches)
 
-    const artifact = await utils.getRallyArtifact(allMatches[0])
+    const rallyApiKey = core.getInput('rally-api-key', { required: true })
+    const rallyApi = rally({
+      apiKey: rallyApiKey,
+      requestOptions: {
+        headers: {
+          'X-RallyIntegrationName': 'Github Action',
+          'X-RallyIntegrationVersion': '1.0'
+        }
+      }
+    })
 
-    core.setOutput('rally-artifact-id', artifact.ObjectUUID)
-    core.setOutput('rally-artifact-name', artifact.Name)
-    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
+    const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
+
+    core.setOutput('rally-artifact-id', artifact._refObjectUUID)
+    core.setOutput('rally-artifact-name', artifact._refObjectName)
+    core.setOutput('rally-artifact-formatted-id', allMatches[0])
     core.setOutput('rally-artifact-url', artifact._ref)
     core.setOutput('rally-artifact-oid', artifact.ObjectID)
     core.setOutput('rally-artifact-description', artifact.Description)
