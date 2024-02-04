@@ -54,12 +54,12 @@ async function run() {
     core.info('Artifact: ')
     core.info(JSON.stringify(artifact))
 
-    core.setOutput('rally-artifact-id', artifact._refObjectUUID)
-    core.setOutput('rally-artifact-name', artifact._refObjectName)
-    core.setOutput('rally-artifact-formatted-id', artifact.allMatches[0])
+    core.setOutput('rally-artifact-id', artifact.ObjectUUID)
+    core.setOutput('rally-artifact-name', artifact.Name)
+    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
     core.setOutput('rally-artifact-url', artifact._ref)
-    // core.setOutput('rally-artifact-oid', artifact.ObjectID)
-    // core.setOutput('rally-artifact-description', artifact.Description)
+    core.setOutput('rally-artifact-oid', artifact.ObjectID)
+    core.setOutput('rally-artifact-description', artifact.Description)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
