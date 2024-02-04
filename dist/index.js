@@ -81437,7 +81437,7 @@ async function run() {
         }
       }
     })
-    const type = allMatches[0].FormattedID.startsWith(storyPrefix)
+    const type = allMatches[0].startsWith(storyPrefix)
       ? 'hierarchicalrequirement'
       : 'defect'
 
