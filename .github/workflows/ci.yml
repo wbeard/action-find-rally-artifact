@@ -67,7 +67,7 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            '<details><summary><h2>📖 <a href="${{
+            '<h1>🔗 Rally Link</h1><details><summary><h2>📖 <a href="${{
             steps.test-action.outputs.rally-artifact-url }}">${{
             steps.test-action.outputs.rally-artifact-formatted-id }}</a> ${{
             steps.test-action.outputs.rally-artifact-name }}</h2></summary>
