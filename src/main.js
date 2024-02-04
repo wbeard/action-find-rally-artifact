@@ -11,10 +11,31 @@ async function run() {
     const title = utils.getTitle()
     const branch = utils.getBranch()
     const body = utils.getBody()
-    const artifactPrefixInput = core.getInput('rally-artifact-prefixes', {
+
+    core.debug(`PR Title: ${title}`)
+    core.debug(`PR Branch: ${branch}`)
+    core.debug(`PR Body: ${body}`)
+
+    if (!title) {
+      core.setFailed(`Could not load PR title`)
+      return
+    }
+
+    if (!branch) {
+      core.setFailed(`Could not load PR branch`)
+      return
+    }
+
+    if (!body) {
+      core.setFailed(`Could not load PR body`)
+      return
+    }
+
+    const storyPrefix = core.getInput('rally-story-prefix', { required: true })
+    const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true
     })
-    const artifactPrefixes = artifactPrefixInput.split(',')
+    const artifactPrefixes = [storyPrefix, defectPrefix]
     const possibleArtifactRegexes = artifactPrefixes.map(
       prefix => new RegExp(`${prefix}\\d{1,10}`, 'g')
     )
@@ -51,9 +72,11 @@ async function run() {
 
     const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
 
+    core.info(JSON.stringify(artifact))
+
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
-    core.setOutput('rally-artifact-formatted-id', allMatches[0])
+    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
     core.setOutput('rally-artifact-url', artifact._ref)
     core.setOutput('rally-artifact-oid', artifact.ObjectID)
     core.setOutput('rally-artifact-description', artifact.Description)
