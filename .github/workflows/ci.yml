@@ -67,11 +67,12 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            '<details><summary><h3>📖 <a href="${{
+            '<details><summary><h2>📖 <a href="${{
             steps.test-action.outputs.rally-artifact-url }}">${{
             steps.test-action.outputs.rally-artifact-formatted-id }}</a> ${{
-            steps.test-action.outputs.rally-artifact-name }}</h3></summary>
-            <hr/> <p>${{ steps.test-action.outputs.rally-artifact-description
+            steps.test-action.outputs.rally-artifact-name }}</h2></summary>
+            <h3>Description</h3> <p>${{
+            steps.test-action.outputs.rally-artifact-description
             }}</p></details>'
 
       - name: Leave a not found comment
