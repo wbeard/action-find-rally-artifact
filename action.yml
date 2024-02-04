@@ -9,8 +9,11 @@ inputs:
     description:
       'Rally API key generated from https://rally1.rallydev.com/#/api_key'
     required: true
-  rally-artifact-prefixes:
-    description: 'Comma deliminated artifact prefixes'
+  rally-story-prefix:
+    description: 'Comma deliminated story prefix'
+    required: true
+  rally-defect-prefix:
+    description: 'Comma deliminated defect prefix'
     required: true
 
 outputs:
