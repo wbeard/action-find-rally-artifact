@@ -81376,9 +81376,9 @@ const rally = __nccwpck_require__(8594)
  */
 async function run() {
   try {
-    const title = utils.getTitle()
-    const branch = utils.getBranch()
-    const body = utils.getBody()
+    const title = utils.getTitle() || ''
+    const branch = utils.getBranch() || ''
+    const body = utils.getBody() || ''
 
     core.debug(`PR Title: ${title}`)
     core.debug(`PR Branch: ${branch}`)
@@ -81437,10 +81437,12 @@ async function run() {
         }
       }
     })
-
     const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
 
-    core.info(JSON.stringify(artifact))
+    if (!artifact) {
+      core.setFailed(`Could not find Rally artifact with ID: ${allMatches[0]}`)
+      return
+    }
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)

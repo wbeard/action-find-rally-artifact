@@ -43,9 +43,10 @@ jobs:
         run: npm run ci-test
 
   test-action:
-    name: Find Rally Artifact
+    name: Find and Link Artifact
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout
         id: checkout
@@ -59,10 +60,26 @@ jobs:
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
 
-      - name: Leave a comment
-        id: comment
-        if: always()
+      - name: Leave a found comment
+        if:
+          ${{ !failure() &&  steps.test-action.outputs.rally-artifact-url != ''
+          }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            'Found Rally Artifact: ${{ steps.find.outputs.rally-artifact-url }}'
+            '<h1>🔗 Rally Link</h1><details><summary><h2>📖 <a href="${{
+            steps.test-action.outputs.rally-artifact-url }}">${{
+            steps.test-action.outputs.rally-artifact-formatted-id }}</a> ${{
+            steps.test-action.outputs.rally-artifact-name }}</h2></summary>
+            <h3>Description</h3> <p>${{
+            steps.test-action.outputs.rally-artifact-description
+            }}</p></details>'
+
+      - name: Leave a not found comment
+        if: ${{ failure() }}
+        uses: mshick/add-pr-comment@v2
+        with:
+          message:
+            '❌ Could not find a Rally artifact to link to this PR. \nPlease
+            ensure that the PR title, description, or a commit message contains
+            a Rally story or defect formatted id (e.g. `S123` or `DE123`).'
