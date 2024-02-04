@@ -81440,6 +81440,8 @@ async function run() {
     const type = allMatches[0].FormattedID.startsWith(storyPrefix)
       ? 'hierarchicalrequirement'
       : 'defect'
+
+    core.info(type)
     const artifact = await utils.getRallyArtifact(rallyApi, type, allMatches[0])
 
     if (!artifact) {
