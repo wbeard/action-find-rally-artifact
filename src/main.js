@@ -11,9 +11,6 @@ async function run() {
     const title = utils.getTitle()
     const branch = utils.getBranch()
     const body = utils.getBody()
-    const artifactPrefixInput = core.getInput('rally-artifact-prefixes', {
-      required: true
-    })
     const storyPrefix = core.getInput('rally-story-prefix', { required: true })
     const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true
