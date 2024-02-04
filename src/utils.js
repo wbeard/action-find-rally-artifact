@@ -12,6 +12,7 @@ function containsFormattedId(str, formattedIdRegex) {
 
 async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
+    type: 'hierarchicalrequirement',
     query: `(FormattedID = ${formattedId})`
   })
 
