@@ -45,7 +45,8 @@ jobs:
   test-action:
     name: Find Rally Artifact
     runs-on: ubuntu-latest
-
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout
         id: checkout
