@@ -62,16 +62,8 @@ jobs:
 
       - name: Leave a found comment
         id: comment-found
-        if: ${{steps.test-action.outputs.rally-artifact-url !== ''}}
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            'Found Rally Artifact: ${{ steps.find.outputs.rally-artifact-url }}'
-            
-       - name: Leave a not found comment
-        id: comment-not-found
-        if: ${{steps.test-action.outputs.rally-artifact-url == ''}}
-        uses: mshick/add-pr-comment@v2
-        with:
-          message:
-            'Did not find a Rally Artifact FormattedID. Please add one to a commit, PR title or description.'
+            'Found Rally Artifact: ${{
+            steps.test-action.outputs.rally-artifact-url }}'
