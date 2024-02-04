@@ -81444,7 +81444,7 @@ async function run() {
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
-    core.setOutput('rally-artifact-formatted-id', allMatches[0])
+    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
     core.setOutput('rally-artifact-url', artifact._ref)
     core.setOutput('rally-artifact-oid', artifact.ObjectID)
     core.setOutput('rally-artifact-description', artifact.Description)
@@ -81480,7 +81480,7 @@ async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
     type: 'hierarchicalrequirement',
     query: `(FormattedID = ${formattedId})`,
-    requestOptions: { fetch: true }
+    fetch: ['FormattedID', 'Description']
   })
 
   return queryResult?.Results?.[0]

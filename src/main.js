@@ -76,7 +76,7 @@ async function run() {
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
-    core.setOutput('rally-artifact-formatted-id', allMatches[0])
+    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
     core.setOutput('rally-artifact-url', artifact._ref)
     core.setOutput('rally-artifact-oid', artifact.ObjectID)
     core.setOutput('rally-artifact-description', artifact.Description)

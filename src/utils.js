@@ -14,7 +14,7 @@ async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
     type: 'hierarchicalrequirement',
     query: `(FormattedID = ${formattedId})`,
-    requestOptions: { fetch: true }
+    fetch: ['FormattedID', 'Description']
   })
 
   return queryResult?.Results?.[0]
