@@ -55,7 +55,8 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 1000
+          rally-api-key: ${{ secrets.RALLYKEY }}
+          rally-artifact-prefixes: 'S,DE'
 
       - name: Print Output
         id: output
