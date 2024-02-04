@@ -58,7 +58,6 @@ async function run() {
     }
 
     core.setOutput('rally-artifacts', allMatches)
-
     const rallyApiKey = core.getInput('rally-api-key', { required: true })
     const rallyApi = rally({
       apiKey: rallyApiKey,
