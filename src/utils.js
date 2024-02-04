@@ -18,7 +18,6 @@ async function getRallyArtifact(formattedId) {
 
   return queryResult?.Results?.[0]
 }
-
 function getTitle() {
   return context?.payload?.pull_request?.title
 }
@@ -29,4 +28,12 @@ function getBranch() {
 
 function getBody() {
   return context?.payload?.pull_request?.body
+}
+
+module.exports = {
+  containsFormattedId,
+  getRallyArtifact,
+  getTitle,
+  getBranch,
+  getBody
 }

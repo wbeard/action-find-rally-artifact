@@ -43,7 +43,7 @@ jobs:
         run: npm run ci-test
 
   test-action:
-    name: GitHub Actions Test
+    name: Rally
     runs-on: ubuntu-latest
 
     steps:

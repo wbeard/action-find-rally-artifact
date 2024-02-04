@@ -81427,7 +81427,7 @@ module.exports = {
 /***/ }),
 
 /***/ 1608:
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __nccwpck_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const { context } = __nccwpck_require__(5438)
 const rally = __nccwpck_require__(8594)
@@ -81449,7 +81449,6 @@ async function getRallyArtifact(formattedId) {
 
   return queryResult?.Results?.[0]
 }
-
 function getTitle() {
   return context?.payload?.pull_request?.title
 }
@@ -81460,6 +81459,14 @@ function getBranch() {
 
 function getBody() {
   return context?.payload?.pull_request?.body
+}
+
+module.exports = {
+  containsFormattedId,
+  getRallyArtifact,
+  getTitle,
+  getBranch,
+  getBody
 }
 
 
