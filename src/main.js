@@ -11,6 +11,26 @@ async function run() {
     const title = utils.getTitle()
     const branch = utils.getBranch()
     const body = utils.getBody()
+
+    core.debug(`PR Title: ${title}`)
+    core.debug(`PR Branch: ${branch}`)
+    core.debug(`PR Body: ${body}`)
+
+    if (!title) {
+      core.setFailed(`Could not load PR title`)
+      return
+    }
+
+    if (!branch) {
+      core.setFailed(`Could not load PR branch`)
+      return
+    }
+
+    if (!body) {
+      core.setFailed(`Could not load PR body`)
+      return
+    }
+
     const storyPrefix = core.getInput('rally-story-prefix', { required: true })
     const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true
