@@ -81437,7 +81437,10 @@ async function run() {
         }
       }
     })
-    const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
+    const type = allMatches[0].FormattedID.startsWith(storyPrefix)
+      ? 'hierarchicalrequirement'
+      : 'defect'
+    const artifact = await utils.getRallyArtifact(rallyApi, type, allMatches[0])
 
     if (!artifact) {
       core.setFailed(`Could not find Rally artifact with ID: ${allMatches[0]}`)
@@ -81450,6 +81453,7 @@ async function run() {
     core.setOutput('rally-artifact-url', artifact._ref)
     core.setOutput('rally-artifact-oid', artifact.ObjectID)
     core.setOutput('rally-artifact-description', artifact.Description)
+    core.setOutput('rally-artifact-type', artifact._Type)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
@@ -81468,9 +81472,9 @@ module.exports = {
 
 const { context } = __nccwpck_require__(5438)
 
-async function getRallyArtifact(rally, formattedId) {
+async function getRallyArtifact(rally, type, formattedId) {
   const queryResult = await rally.query({
-    type: 'hierarchicalrequirement',
+    type,
     query: `(FormattedID = ${formattedId})`,
     fetch: ['FormattedID', 'Description']
   })
