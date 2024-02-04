@@ -81423,6 +81423,7 @@ async function run() {
       body,
       commitMessages
     })
+    core.info(`commits ${JSON.stringify(commitMessages)}`)
 
     if (formattedIds.length === 0) {
       core.setFailed(
