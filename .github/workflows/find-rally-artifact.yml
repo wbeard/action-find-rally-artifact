@@ -26,7 +26,7 @@ jobs:
 
       - name: Find Rally Artifact
         id: find
-        uses: wbeard/action-find-rally-artifact@v1.2
+        uses: wbeard/action-find-rally-artifact@v1.3
         with:
           rally-api-key: ${{ secrets.RALLYKEY }}
           rally-story-prefix: 'S'
