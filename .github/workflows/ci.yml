@@ -43,7 +43,7 @@ jobs:
         run: npm run ci-test
 
   test-action:
-    name: Find Rally Artifact
+    name: Find and Link Artifact
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -61,10 +61,8 @@ jobs:
           rally-defect-prefix: 'DE'
 
       - name: Leave a found comment
-        id: comment-found
         if:
-          ${{ success() && steps.test-action.outputs.rally-artifact-url !== ''
-          }}
+          ${{ always() && steps.test-action.outputs.rally-artifact-url !== '' }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
