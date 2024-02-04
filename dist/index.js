@@ -81431,8 +81431,6 @@ async function run() {
       return
     }
 
-    core.setOutput('rally-artifacts', formattedIds)
-
     const rallyApiKey = core.getInput('rally-api-key', { required: true })
     const rallyApi = rally({
       apiKey: rallyApiKey,
