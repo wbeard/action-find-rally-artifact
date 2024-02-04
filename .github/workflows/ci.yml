@@ -69,8 +69,9 @@ jobs:
           message:
             '<h3>📖 <a href="${{ steps.test-action.outputs.rally-artifact-url
             }}">${{ steps.test-action.outputs.rally-artifact-formatted-id }}</a>
-            ${{ steps.test-action.outputs.rally-artifact-name }}</h3> <p>${{
-            steps.test-action.outputs.rally-artifact-description }}</p>'
+            </h3> <h3>${{ steps.test-action.outputs.rally-artifact-name }}</h3>
+            <hr/> <p>${{ steps.test-action.outputs.rally-artifact-description
+            }}</p>'
 
       - name: Leave a not found comment
         if: ${{ failure() }}
