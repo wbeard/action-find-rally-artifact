@@ -69,7 +69,6 @@ async function run() {
         }
       }
     })
-
     const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
