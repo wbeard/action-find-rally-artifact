@@ -14,7 +14,11 @@ async function run() {
     const artifactPrefixInput = core.getInput('rally-artifact-prefixes', {
       required: true
     })
-    const artifactPrefixes = artifactPrefixInput.split(',')
+    const storyPrefix = core.getInput('rally-story-prefix', { required: true })
+    const defectPrefix = core.getInput('rally-defect-prefix', {
+      required: true
+    })
+    const artifactPrefixes = [storyPrefix, defectPrefix]
     const possibleArtifactRegexes = artifactPrefixes.map(
       prefix => new RegExp(`${prefix}\\d{1,10}`, 'g')
     )
@@ -50,6 +54,8 @@ async function run() {
     })
 
     const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
+
+    core.info(JSON.stringify(artifact))
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
