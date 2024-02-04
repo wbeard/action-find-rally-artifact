@@ -1,19 +1,40 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: "Find Rally Artifact"
+description: "To ensure every PR has a Rally Artifact associated with it."
+branding:
+  icon: "link"
+  color: "red"
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  rally-api-key:
+    description: "Rally API key generated from https://rally1.rallydev.com/#/api_key"
     required: true
-    default: '1000'
+  rally-artifact-prefixes:
+    description: "Comma deliminated artifact prefixes"
+    required: true
 
-# Define your outputs here.
 outputs:
-  time:
-    description: 'Your output description here'
+  rally-artifact-id:
+    description: "The Rally artifact's unique identifier. (UUID)"
+    value: ${{ steps.find.outputs.rally-artifact-id || steps.create.outputs.rally-artifact-id}}
+  rally-artifact-formatted-id:
+    description: "The Rally issue's formatted id. (e.g. `US123`)"
+    value: ${{ steps.find.outputs.rally-artifact-formatted-id || steps.create.outputs.rally-artifact-formatted-id}}
+  rally-artifact-oid:
+    description: "The Rally issue's oid. (e.g. the `123` of `ENG-123`)"
+    value: ${{ steps.find.outputs.rally-artifact-oid || steps.create.outputs.rally-artifact-oid}}
+  rally-artifact-name:
+    description: "The Rally issue's name."
+    value: ${{ steps.find.outputs.rally-artifact-name || steps.create.outputs.rally-artifact-name}}
+  rally-artifact-description:
+    description: "The Rally issue's description."
+    value: ${{ steps.find.outputs.rally-artifact-description || steps.create.outputs.rally-artifact-description}}
+  rally-artifact-url:
+    description: "The Rally issue's URL. (e.g. `https://...`)"
+    value: ${{ steps.find.outputs.rally-artifact-url || steps.create.outputs.rally-artifact-url}}
 
 runs:
-  using: node20
-  main: dist/index.js
+  using: "node16"
+  main: "dist/index.js"
+branding:
+  icon: "checklist"
+  color: "gray-dark"

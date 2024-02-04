@@ -1,5 +1,5 @@
 const core = require('@actions/core')
-const { wait } = require('./wait')
+const utils = require('./utils')
 
 /**
  * The main function for the action.
@@ -7,18 +7,44 @@ const { wait } = require('./wait')
  */
 async function run() {
   try {
-    const ms = core.getInput('milliseconds', { required: true })
+    const title = utils.getTitle()
+    const branch = utils.getBranch()
+    const body = utils.getBody()
+    const artifactPrefixInput = core.getInput('rally-artifact-prefixes', {
+      required: true
+    })
+    const artifactPrefixes = artifactPrefixInput.split(',')
+    const possibleArtifactRegexes = artifactPrefixes.map(
+      prefix => new RegExp(`${prefix}\\d{1,10}`, 'g')
+    )
+    const titleMatches = possibleArtifactRegexes
+      .flatMap(regex => title.match(regex))
+      .filter(Boolean)
+    const bodyMatches = possibleArtifactRegexes
+      .flatMap(regex => body.match(regex))
+      .filter(Boolean)
+    const branchMatches = possibleArtifactRegexes
+      .flatMap(regex => branch.match(regex))
+      .filter(Boolean)
+    const allMatches = titleMatches.concat(bodyMatches).concat(branchMatches)
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    if (allMatches.length === 0) {
+      core.setFailed(
+        'No Rally artifact found in the title, body, or branch name.'
+      )
+      return
+    }
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    core.setOutput('rally-artifacts', allMatches)
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    const artifact = await utils.getRallyArtifact(allMatches[0])
+
+    core.setOutput('rally-artifact-id', artifact.ObjectUUID)
+    core.setOutput('rally-artifact-name', artifact.Name)
+    core.setOutput('rally-artifact-formatted-id', artifact.FormattedID)
+    core.setOutput('rally-artifact-url', artifact._ref)
+    core.setOutput('rally-artifact-oid', artifact.ObjectID)
+    core.setOutput('rally-artifact-description', artifact.Description)
   } catch (error) {
     // Fail the workflow run if an error occurs
     core.setFailed(error.message)
