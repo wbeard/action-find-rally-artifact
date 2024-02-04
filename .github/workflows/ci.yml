@@ -60,4 +60,7 @@ jobs:
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: echo "${{ steps.test-action.outputs.rally-artifact-id }}"
+        run: echo "${{ steps.test-action.outputs.rally-artifact-name }}"
+        run: echo "${{ steps.test-action.outputs.rally-artifact-formatted-id }}"
+        run: echo "${{ steps.test-action.outputs.rally-artifact-url }}"
