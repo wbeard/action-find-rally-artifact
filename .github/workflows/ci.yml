@@ -63,7 +63,8 @@ jobs:
       - name: Leave a found comment
         id: comment-found
         if:
-          ${{ always() && steps.test-action.outputs.rally-artifact-url !== '' }}
+          ${{ success() && steps.test-action.outputs.rally-artifact-url !== ''
+          }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
