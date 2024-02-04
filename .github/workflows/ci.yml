@@ -61,19 +61,12 @@ jobs:
           rally-defect-prefix: 'DE'
 
       - name: Leave a found comment
-        if: ${{  steps.test-action.outputs.rally-artifact-url != '' }}
         uses: mshick/add-pr-comment@v2
         with:
-          message:
-            'Found Rally Artifact: ${{
+          message-success:
+            '✅ Found Rally Artifact: ${{
             steps.test-action.outputs.rally-artifact-url }}'
-
-      - name: Leave a found comment
-        if:
-          ${{ failure() || steps.test-action.outputs.rally-artifact-url == '' }}
-        uses: mshick/add-pr-comment@v2
-        with:
-          message:
-            'Could not find a Rally artifact to link to this PR. Please ensure \
-            that the PR title, description, or a commit message contains a \
-            Rally story or defect formatted id (e.g. `S123` or `DE123`).'
+          message-failure:
+            '❌ Could not find a Rally artifact to link to this PR. Please
+            ensure that the PR title, description, or a commit message contains
+            a Rally story or defect formatted id (e.g. `S123` or `DE123`).'
