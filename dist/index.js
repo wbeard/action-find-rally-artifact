@@ -81376,9 +81376,9 @@ const rally = __nccwpck_require__(8594)
  */
 async function run() {
   try {
-    const title = utils.getTitle()
-    const branch = utils.getBranch()
-    const body = utils.getBody()
+    const title = utils.getTitle() || ''
+    const branch = utils.getBranch() || ''
+    const body = utils.getBody() || ''
 
     core.debug(`PR Title: ${title}`)
     core.debug(`PR Branch: ${branch}`)

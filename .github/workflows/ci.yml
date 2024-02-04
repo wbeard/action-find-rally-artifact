@@ -67,14 +67,30 @@ jobs:
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            '✅ Found Rally Artifact: ${{
-            steps.test-action.outputs.rally-artifact-url }}'
+            '<h3>📖 <a href="${{ steps.test-action.outputs.rally-artifact-url
+            }}">${{ steps.test-action.outputs.rally-artifact-formatted-id }}</a>
+            ${{ steps.test-action.outputs.rally-artifact-name }}</h3> <p>${{
+            steps.test-action.outputs.rally-artifact-description }}</p>'
 
-      - name: Leave a found comment
+      - name: Leave a not found comment
         if: ${{ failure() }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
-            '❌ Could not find a Rally artifact to link to this PR. Please
+            '❌ Could not find a Rally artifact to link to this PR. \nPlease
             ensure that the PR title, description, or a commit message contains
             a Rally story or defect formatted id (e.g. `S123` or `DE123`).'
+
+      - name: Create a PR in Rally
+        if:
+          ${{ !failure() &&  steps.test-action.outputs.rally-artifact-url != ''
+          }}
+        uses: ./create-rally-pr
+        with:
+          rally-api-key: ${{ secrets.RALLYKEY }}
+          rally-artifact-ref: ${{ steps.test-action.outputs.rally-artifact-id }}
+          rally-pr-name: ${{ github.event.pull_request.title }}
+          rally-pr-url: ${{ github.event.pull_request.html_url }}
+          rally-pr-external-formatted-id:
+            ${{ github.event.pull_request.number }}
+          rally-pr-external-id: ${{ github.event.pull_request.node_id }}
