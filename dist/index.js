@@ -81439,7 +81439,7 @@ async function run() {
     })
     const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
 
-    core.info(`Artifact: ${JSON.stringify(artifact)}`)
+    core.info(`Artifact: ${artifact._ref}`)
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
