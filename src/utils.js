@@ -1,10 +1,10 @@
 const { context } = require('@actions/github')
 
-async function getRallyArtifact(rally, formattedId) {
+async function getRallyArtifact(rally, type, formattedId) {
   const queryResult = await rally.query({
-    type: 'hierarchicalrequirement',
+    type,
     query: `(FormattedID = ${formattedId})`,
-    fetch: ['FormattedID', 'Description']
+    fetch: ['FormattedID', 'Description', 'Name', 'PlanEstimate']
   })
 
   return queryResult?.Results?.[0]
