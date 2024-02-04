@@ -61,7 +61,9 @@ jobs:
           rally-defect-prefix: 'DE'
 
       - name: Leave a found comment
-        if: ${{  steps.test-action.outputs.rally-artifact-url != '' }}
+        if:
+          ${{ !failure() &&  steps.test-action.outputs.rally-artifact-url != ''
+          }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
@@ -69,7 +71,7 @@ jobs:
             steps.test-action.outputs.rally-artifact-url }}'
 
       - name: Leave a found comment
-        if: ${{  steps.test-action.outputs.rally-artifact-url == '' }}
+        if: ${{ failure() }}
         uses: mshick/add-pr-comment@v2
         with:
           message:
