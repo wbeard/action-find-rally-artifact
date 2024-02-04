@@ -60,7 +60,7 @@ jobs:
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
 
-      - name: Leave a comment
+      - name: Leave a found comment
         id: comment-found
         if: steps.test-action.outputs.rally-artifact-url !== ''
         uses: mshick/add-pr-comment@v2
@@ -68,7 +68,7 @@ jobs:
           message:
             'Found Rally Artifact: ${{ steps.find.outputs.rally-artifact-url }}'
             
-       - name: Leave a comment
+       - name: Leave a not found comment
         id: comment-not-found
         if: steps.test-action.outputs.rally-artifact-url == ''
         uses: mshick/add-pr-comment@v2
