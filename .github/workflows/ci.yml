@@ -62,7 +62,7 @@ jobs:
 
       - name: Leave a found comment
         id: comment-found
-        if: steps.test-action.outputs.rally-artifact-url !== ''
+        if: ${{steps.test-action.outputs.rally-artifact-url !== ''}}
         uses: mshick/add-pr-comment@v2
         with:
           message:
@@ -70,7 +70,7 @@ jobs:
             
        - name: Leave a not found comment
         id: comment-not-found
-        if: steps.test-action.outputs.rally-artifact-url == ''
+        if: ${{steps.test-action.outputs.rally-artifact-url == ''}}
         uses: mshick/add-pr-comment@v2
         with:
           message:
