@@ -29,4 +29,4 @@ jobs:
         uses: wbeard/action-find-rally-artifact@v1
         with:
           rally-api-key: ${{ secrets.RALLYKEY }}
-          rally-artifact-prefixes: 'US,DE,TA'
+          rally-artifact-prefixes: 'S,DE'
