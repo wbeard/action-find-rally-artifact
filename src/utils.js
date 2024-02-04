@@ -4,7 +4,7 @@ async function getRallyArtifact(rally, type, formattedId) {
   const queryResult = await rally.query({
     type,
     query: `(FormattedID = ${formattedId})`,
-    fetch: ['FormattedID', 'Description']
+    fetch: ['FormattedID', 'Description', 'Name']
   })
 
   return queryResult?.Results?.[0]
