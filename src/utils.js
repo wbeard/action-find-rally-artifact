@@ -1,5 +1,4 @@
 const { context } = require('@actions/github')
-const rally = require('rally')
 
 function containsFormattedId(str, formattedIdRegex) {
   const matches = str.match(formattedIdRegex)
@@ -11,7 +10,7 @@ function containsFormattedId(str, formattedIdRegex) {
   }
 }
 
-async function getRallyArtifact(formattedId) {
+async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
     query: `(FormattedID = ${formattedId})`
   })

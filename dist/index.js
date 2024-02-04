@@ -81368,6 +81368,7 @@ function wrappy (fn, cb) {
 
 const core = __nccwpck_require__(2186)
 const utils = __nccwpck_require__(1608)
+const rally = __nccwpck_require__(8594)
 
 /**
  * The main function for the action.
@@ -81405,7 +81406,18 @@ async function run() {
 
     core.setOutput('rally-artifacts', allMatches)
 
-    const artifact = await utils.getRallyArtifact(allMatches[0])
+    const rallyApiKey = core.getInput('rally-api-key', { required: true })
+    const rallyApi = rally({
+      apiKey: rallyApiKey,
+      requestOptions: {
+        headers: {
+          'X-RallyIntegrationName': 'Github Action',
+          'X-RallyIntegrationVersion': '1.0'
+        }
+      }
+    })
+
+    const artifact = await utils.getRallyArtifact(rallyApi, allMatches[0])
 
     core.setOutput('rally-artifact-id', artifact.ObjectUUID)
     core.setOutput('rally-artifact-name', artifact.Name)
@@ -81430,7 +81442,6 @@ module.exports = {
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const { context } = __nccwpck_require__(5438)
-const rally = __nccwpck_require__(8594)
 
 function containsFormattedId(str, formattedIdRegex) {
   const matches = str.match(formattedIdRegex)
@@ -81442,7 +81453,7 @@ function containsFormattedId(str, formattedIdRegex) {
   }
 }
 
-async function getRallyArtifact(formattedId) {
+async function getRallyArtifact(rally, formattedId) {
   const queryResult = await rally.query({
     query: `(FormattedID = ${formattedId})`
   })
