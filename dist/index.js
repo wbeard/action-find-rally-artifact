@@ -81422,7 +81422,6 @@ async function run() {
       body,
       commitMessage
     })
-    core.info(`commit ${commitMessage}`)
 
     if (formattedIds.length === 0) {
       core.setFailed(
@@ -81456,6 +81455,14 @@ async function run() {
       )
       return
     }
+
+    core.debug('rally-artifact-id')
+    core.debug('rally-artifact-name')
+    core.debug('rally-artifact-formatted-id')
+    core.debug('rally-artifact-url')
+    core.debug('rally-artifact-oid')
+    core.debug('rally-artifact-description')
+    core.debug('rally-artifact-type')
 
     core.setOutput('rally-artifact-id', artifact._refObjectUUID)
     core.setOutput('rally-artifact-name', artifact._refObjectName)
