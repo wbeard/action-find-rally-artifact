@@ -28,6 +28,7 @@ async function run() {
           Url: prUrl,
           Artifact: artifactRef,
           ExternalFormattedId: externalFormattedId,
+
           ExternalId: externalId
         }
       }
