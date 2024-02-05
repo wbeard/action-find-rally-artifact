@@ -59,7 +59,7 @@ jobs:
           rally-api-key: ${{ secrets.RALLYKEY }}
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
-          commit-msg: ${{ github.event.head_commit.message }}
+          commit-msg: ${{ github.event.pull_request.head.sha }}
 
       - name: Leave a found comment
         if:
