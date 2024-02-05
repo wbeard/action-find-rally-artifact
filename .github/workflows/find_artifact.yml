@@ -1,0 +1,54 @@
+name: 'Find Rally Artifact'
+
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  find-artifact:
+    name: Find Artifact
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{github.event.after}}
+
+      - name: Get Commit Message
+        id: get-commit-msg
+        run: |
+          echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{github.event.after}})" >> "$GITHUB_OUTPUT"
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          rally-api-key: ${{ secrets.RALLYKEY }}
+          rally-story-prefix: 'S'
+          rally-defect-prefix: 'DE'
+
+      - name: Leave a found comment
+        if:
+          ${{ !failure() &&  steps.test-action.outputs.rally-artifact-url != ''
+          }}
+        id: found-message
+        run:
+          echo "<h1>🔗 Rally Link</h1><h2>📖 <a href="${{
+          steps.test-action.outputs.rally-artifact-url }}">${{
+          steps.test-action.outputs.rally-artifact-formatted-id }}</a> ${{
+          steps.test-action.outputs.rally-artifact-name }}</h2>" >>
+          $GITHUB_STEP_SUMMARY
+
+      - name: Leave a not found comment
+        if: ${{ failure() }}
+        id: not-found-message
+        run: echo "❌ Could not find a Rally artifact to link to this PR.
+
+          Please ensure that the PR title, description, or a commit message
+          contains a Rally story or defect formatted id (e.g. `S123` or
+          `DE123`)." >> $GITHUB_STEP_SUMMARY
