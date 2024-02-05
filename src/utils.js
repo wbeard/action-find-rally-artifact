@@ -21,12 +21,12 @@ function getBody() {
   return context?.payload?.pull_request?.body
 }
 
-function getCommitMessages() {
-  return context?.payload?.commits?.map(commit => commit.message)
+function getCommitMessage() {
+  return context?.event?.head_commit?.message
 }
 
 module.exports = {
-  getCommitMessages,
+  getCommitMessage,
   getRallyArtifact,
   getTitle,
   getBranch,

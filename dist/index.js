@@ -81369,13 +81369,14 @@ function wrappy (fn, cb) {
 const core = __nccwpck_require__(2186)
 const utils = __nccwpck_require__(1608)
 const rally = __nccwpck_require__(8594)
+const github = __nccwpck_require__(5438)
 
 function getFormattedIds({
   artifactPrefixes,
   title,
   branch,
   body,
-  commitMessages
+  commitMessage
 }) {
   const possibleArtifactRegexes = artifactPrefixes.map(
     prefix => new RegExp(`${prefix}\\d{1,10}`, 'g')
@@ -81389,12 +81390,10 @@ function getFormattedIds({
   const branchMatches = possibleArtifactRegexes
     .flatMap(regex => branch.match(regex))
     .filter(Boolean)
-  let commitMatches = []
-  for (const message of commitMessages) {
-    commitMatches = commitMatches.concat(
-      possibleArtifactRegexes.flatMap(regex => message.match(regex))
-    )
-  }
+  const commitMatches = possibleArtifactRegexes
+    .flatMap(regex => commitMessage.match(regex))
+    .filter(Boolean)
+
   return titleMatches
     .concat(bodyMatches)
     .concat(branchMatches)
@@ -81410,7 +81409,7 @@ async function run() {
     const title = utils.getTitle() || ''
     const branch = utils.getBranch() || ''
     const body = utils.getBody() || ''
-    const commitMessages = utils.getCommitMessages() || []
+    const commitMessage = utils.getCommitMessage() || ''
     const storyPrefix = core.getInput('rally-story-prefix', { required: true })
     const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true
@@ -81421,13 +81420,13 @@ async function run() {
       title,
       branch,
       body,
-      commitMessages
+      commitMessage
     })
-    core.info(`commits ${JSON.stringify(commitMessages)}`)
+    core.info(`commit ${commitMessage}`)
 
     if (formattedIds.length === 0) {
       core.setFailed(
-        'No Rally artifact formatted id found in the commit messages, title, body, or branch name.'
+        'No Rally artifact formatted id found in the commit message, title, body, or branch name.'
       )
       return
     }
@@ -81503,12 +81502,12 @@ function getBody() {
   return context?.payload?.pull_request?.body
 }
 
-function getCommitMessages() {
-  return context?.payload?.commits?.map(commit => commit.message)
+function getCommitMessage() {
+  return context?.event?.head_commit?.message
 }
 
 module.exports = {
-  getCommitMessages,
+  getCommitMessage,
   getRallyArtifact,
   getTitle,
   getBranch,

@@ -1,13 +1,14 @@
 const core = require('@actions/core')
 const utils = require('./utils')
 const rally = require('rally')
+const github = require('@actions/github')
 
 function getFormattedIds({
   artifactPrefixes,
   title,
   branch,
   body,
-  commitMessages
+  commitMessage
 }) {
   const possibleArtifactRegexes = artifactPrefixes.map(
     prefix => new RegExp(`${prefix}\\d{1,10}`, 'g')
@@ -21,12 +22,10 @@ function getFormattedIds({
   const branchMatches = possibleArtifactRegexes
     .flatMap(regex => branch.match(regex))
     .filter(Boolean)
-  let commitMatches = []
-  for (const message of commitMessages) {
-    commitMatches = commitMatches.concat(
-      possibleArtifactRegexes.flatMap(regex => message.match(regex))
-    )
-  }
+  const commitMatches = possibleArtifactRegexes
+    .flatMap(regex => commitMessage.match(regex))
+    .filter(Boolean)
+
   return titleMatches
     .concat(bodyMatches)
     .concat(branchMatches)
@@ -42,7 +41,7 @@ async function run() {
     const title = utils.getTitle() || ''
     const branch = utils.getBranch() || ''
     const body = utils.getBody() || ''
-    const commitMessages = utils.getCommitMessages() || []
+    const commitMessage = utils.getCommitMessage() || ''
     const storyPrefix = core.getInput('rally-story-prefix', { required: true })
     const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true
@@ -53,13 +52,13 @@ async function run() {
       title,
       branch,
       body,
-      commitMessages
+      commitMessage
     })
-    core.info(`commits ${JSON.stringify(commitMessages)}`)
+    core.info(`commit ${commitMessage}`)
 
     if (formattedIds.length === 0) {
       core.setFailed(
-        'No Rally artifact formatted id found in the commit messages, title, body, or branch name.'
+        'No Rally artifact formatted id found in the commit message, title, body, or branch name.'
       )
       return
     }
