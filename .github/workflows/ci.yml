@@ -59,7 +59,7 @@ jobs:
         id: get-commit-msg
         run: |
           MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-          echo "{COMMIT_MSG}={MSG}" >> "$GITHUB_ENV"
+          echo "{COMMIT_MSG}={MSG}" >> "$GITHUB_OUTPUT"
 
       - name: Test Local Action
         id: test-action
@@ -68,7 +68,7 @@ jobs:
           rally-api-key: ${{ secrets.RALLYKEY }}
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
-          commit-msg: ${{env.COMMIT_MESSAGE}}
+          commit-msg: ${{ steps.get-commit-msg.outputs.COMMIT_MSG }}
 
       - name: Leave a found comment
         if:
