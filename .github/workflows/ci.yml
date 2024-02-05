@@ -58,8 +58,7 @@ jobs:
       - name: Get Commit Message
         id: get-commit-msg
         run: |
-          MSG=$(git log --format=%B -n 1 ${{github.event.after}})
-          echo "{COMMIT_MSG}={MSG}" >> "$GITHUB_OUTPUT"
+          echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{github.event.after}})" >> "$GITHUB_OUTPUT"
 
       - name: Test Local Action
         id: test-action
