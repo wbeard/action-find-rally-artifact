@@ -41,7 +41,7 @@ async function run() {
     const title = utils.getTitle() || ''
     const branch = utils.getBranch() || ''
     const body = utils.getBody() || ''
-    const commitMessage = utils.getCommitMessage() || ''
+    const commitMessage = core.getInput('commit-msg', { required: true })
     const storyPrefix = core.getInput('rally-story-prefix', { required: true })
     const defectPrefix = core.getInput('rally-defect-prefix', {
       required: true

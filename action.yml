@@ -14,6 +14,9 @@ inputs:
   rally-defect-prefix:
     description: 'Comma deliminated defect prefix'
     required: true
+  commit-msg:
+    description: 'The commit message'
+    required: true
 outputs:
   rally-artifact-id:
     description: "The Rally artifact's unique identifier. (UUID)"
