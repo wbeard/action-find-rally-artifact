@@ -21,7 +21,12 @@ function getBody() {
   return context?.payload?.pull_request?.body
 }
 
+function getCommitMessage() {
+  return context?.event?.head_commit?.message
+}
+
 module.exports = {
+  getCommitMessage,
   getRallyArtifact,
   getTitle,
   getBranch,

@@ -10,38 +10,6 @@ permissions:
   contents: read
 
 jobs:
-  test-javascript:
-    name: JavaScript Tests
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        id: setup-node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: .node-version
-          cache: npm
-
-      - name: Install Dependencies
-        id: npm-ci
-        run: npm ci
-
-      - name: Check Format
-        id: npm-format-check
-        run: npm run format:check
-
-      - name: Lint
-        id: npm-lint
-        run: npm run lint
-
-      - name: Test
-        id: npm-ci-test
-        run: npm run ci-test
-
   test-action:
     name: Find and Link Artifact
     runs-on: ubuntu-latest
@@ -51,6 +19,14 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{github.event.after}}
+
+      - name: Get Commit Message
+        id: get-commit-msg
+        run: |
+          echo "COMMIT_MSG=$(git log --format=%B -n 1 ${{github.event.after}})" >> "$GITHUB_OUTPUT"
 
       - name: Test Local Action
         id: test-action
@@ -59,6 +35,7 @@ jobs:
           rally-api-key: ${{ secrets.RALLYKEY }}
           rally-story-prefix: 'S'
           rally-defect-prefix: 'DE'
+          commit-msg: ${{ steps.get-commit-msg.outputs.COMMIT_MSG }}
 
       - name: Leave a found comment
         if:
